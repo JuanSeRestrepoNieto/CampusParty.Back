@@ -14,7 +14,7 @@ export class AuthController {
     return this.authService.create(createAuthDto);
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.authService.findAll();
   }

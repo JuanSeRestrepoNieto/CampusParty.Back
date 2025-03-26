@@ -9,7 +9,6 @@ export class PabellonController {
 
   @Post()
   create(@Body() createPabellonDto: CreatePabellonDto) {
-    console.log(createPabellonDto);
     return this.pabellonService.create(createPabellonDto);
   }
 
@@ -25,7 +24,6 @@ export class PabellonController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePabellonDto: UpdatePabellonDto) {
-    console.log(updatePabellonDto);
     return this.pabellonService.update(+id, updatePabellonDto);
   }
 

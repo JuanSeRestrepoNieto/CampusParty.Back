@@ -12,7 +12,15 @@ export class PabellonService {
     private readonly pabellonRepository: Repository<Pabellon>,
   ) {}
 
-  create(createPabellonDto: CreatePabellonDto) {
+  async create(createPabellonDto: CreatePabellonDto) {
+    const existingPabellon = await this.pabellonRepository.findOne({ 
+      where: { nombre: createPabellonDto.nombre } 
+    });
+  
+    if (existingPabellon) {
+      throw new Error('Pabellon with this name already exists');
+    }
+  
     return this.pabellonRepository.save(createPabellonDto);
   }
 
@@ -28,7 +36,21 @@ export class PabellonService {
     return this.pabellonRepository.update(id, updatePabellonDto);
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    const pabellon = await this.pabellonRepository.findOne({
+      where: { id },
+      relations: ['carpa'], // Ensure carpas are loaded
+    });
+  
+    if (!pabellon) {
+      throw new Error('Pabellon not found');
+    }
+  
+    if (pabellon.carpa && pabellon.carpa.length > 0) {
+      throw new Error('Cannot delete pabellon with associated carpas');
+    }
+  
     return this.pabellonRepository.delete(id);
   }
+  
 }

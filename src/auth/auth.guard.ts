@@ -5,7 +5,6 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
-    private readonly reflector: Reflector,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -27,7 +26,8 @@ export class JwtAuthGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.get('Authorization')?.split(' ') ?? [];
+    const [type, token] = request.headers['authorization']?.split(' ') ?? [];
+    console.log(type, token, request.headers);
     return type === 'Bearer' ? token : undefined;
   }
 }
